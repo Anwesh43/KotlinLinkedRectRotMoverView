@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.linkedrectrotmoverview
  * Created by anweshmishra on 09/06/18.
  */
 
+import android.app.Activity
 import android.view.MotionEvent
 import android.content.Context
 import android.view.View
@@ -11,7 +12,7 @@ import android.graphics.*
 
 val RRMNODES : Int = 5
 
-class LinkedRectRotMoverView (ctx : Context) : View (ctx) {e
+class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
 
     private val renderer : Renderer = Renderer(this)
 
@@ -187,6 +188,14 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {e
             lrrm.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : LinkedRectRotMoverView {
+            val view : LinkedRectRotMoverView = LinkedRectRotMoverView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 
