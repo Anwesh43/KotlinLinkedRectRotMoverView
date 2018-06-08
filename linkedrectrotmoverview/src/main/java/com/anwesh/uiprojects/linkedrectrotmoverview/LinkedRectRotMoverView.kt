@@ -9,6 +9,8 @@ import android.content.Context
 import android.view.View
 import android.graphics.*
 
+val RRMNODES : Int = 5
+
 class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
 
     override fun onDraw(canvas : Canvas) {
@@ -26,7 +28,7 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
 
     data class State(var prevScale : Float = 0f, var dir : Float = 0f, var j : Int = 0) {
 
-        private var scales : Array<Float> = arrayOf(0f, 0f, 0f)
+        var scales : Array<Float> = arrayOf(0f, 0f, 0f)
 
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += 0.1f * dir
@@ -75,6 +77,64 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class RRMNode(val i : Int) {
+
+        private val state : State = State()
+
+        private var next : RRMNode? = null
+
+        private var prev : RRMNode? = null
+
+        init {
+            addNeighbor()
+        }
+
+        fun addNeighbor() {
+            if (i < RRMNODES - 1) {
+                next = RRMNode(i + 1)
+                next?.prev = this
+            }
+        }
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            val wGap : Float = (w / RRMNODES)
+            val size : Float = wGap/5
+            canvas.save()
+            canvas.translate(i * wGap, h/2)
+            canvas.save()
+            canvas.translate(wGap * state.scales[2], 0f)
+            canvas.drawRect(RectF(-size/2, -size/2, size/2, size/2), paint)
+            canvas.restore()
+            canvas.save()
+            canvas.rotate(-90f * state.scales[1])
+            canvas.drawLine(0f, size * state.scales[2], 0f, size * state.scales[0], paint)
+            canvas.restore()
+            canvas.restore()
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            state.startUpdating(startcb)
+        }
+
+        fun getNext(dir : Int, cb : () -> Unit) : RRMNode {
+            var curr : RRMNode? = prev
+            if (dir == 1) {
+                curr = next
+            }
+            if (curr != null) {
+                return curr
+            }
+            cb()
+            return this
         }
     }
 }
