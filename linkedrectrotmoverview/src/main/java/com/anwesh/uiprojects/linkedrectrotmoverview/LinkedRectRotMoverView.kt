@@ -115,11 +115,11 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
             canvas.translate(i * wGap, h/2)
             canvas.save()
             canvas.translate(wGap * state.scales[2], 0f)
-            canvas.drawRect(RectF(-size/2, -size/2, size/2, size/2), paint)
+            canvas.drawRect(RectF(-size, -size, size, size), paint)
             canvas.restore()
             canvas.save()
             canvas.rotate(-90f * state.scales[1])
-            canvas.drawLine(0f, size * state.scales[2], 0f, size * state.scales[0], paint)
+            canvas.drawLine(0f, wGap * state.scales[2], 0f, wGap * state.scales[0], paint)
             canvas.restore()
             canvas.restore()
         }
