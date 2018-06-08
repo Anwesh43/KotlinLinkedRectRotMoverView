@@ -137,4 +137,29 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
             return this
         }
     }
+
+    data class LinkedRectRotMover (val i : Int) {
+
+        var curr : RRMNode = RRMNode(0)
+
+        var dir : Int = 1
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            paint.color = Color.parseColor("#4527A0")
+            curr.draw(canvas, paint)
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            curr.update {
+                curr = curr.getNext(dir) {
+                    dir *= -1
+                }
+                stopcb(it)
+            }
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            curr.startUpdating(startcb)
+        }
+    }
 }
