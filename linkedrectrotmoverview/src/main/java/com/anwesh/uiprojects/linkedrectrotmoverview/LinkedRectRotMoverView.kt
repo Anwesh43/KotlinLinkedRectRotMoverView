@@ -109,6 +109,8 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
             val h : Float = canvas.height.toFloat()
             val wGap : Float = (w / RRMNODES)
             val size : Float = wGap/5
+            paint.strokeCap = Paint.Cap.ROUND
+            paint.strokeWidth = wGap / 12
             canvas.save()
             canvas.translate(i * wGap, h/2)
             canvas.save()
