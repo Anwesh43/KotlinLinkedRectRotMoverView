@@ -162,4 +162,28 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
             curr.startUpdating(startcb)
         }
     }
+
+    data class Renderer (var view : LinkedRectRotMoverView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val lrrm : LinkedRectRotMover = LinkedRectRotMover(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            lrrm.draw(canvas, paint)
+            animator.update {
+                lrrm.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            lrrm.startUpdating {
+                animator.start()
+            }
+        }
+    }
+
 }
