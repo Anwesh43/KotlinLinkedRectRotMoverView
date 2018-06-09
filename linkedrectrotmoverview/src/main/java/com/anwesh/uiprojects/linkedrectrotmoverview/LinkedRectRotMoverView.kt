@@ -49,7 +49,7 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
                 }
             } else {
                 delay++
-                if (delay == MAX_DELAY) {
+                if (delay == MAX_DELAY || (j == scales.size - 1 && dir == 1f) || (j == 0 && dir == -1f)) {
                     delay = 0
                     j += dir.toInt()
                     if (j == scales.size || j == -1) {
