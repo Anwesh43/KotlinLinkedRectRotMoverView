@@ -35,18 +35,31 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
 
         var scales : Array<Float> = arrayOf(0f, 0f, 0f)
 
+        val MAX_DELAY : Int = 11
+
+        var delay : Int = 0
+
         fun update(stopcb : (Float) -> Unit) {
-            scales[j] += 0.1f * dir
-            if (Math.abs(scales[j] - prevScale) > 1) {
-                scales[j] = prevScale + dir
-                j += dir.toInt()
-                if (j == scales.size || j == -1) {
-                    j -= dir.toInt()
-                    dir = 0f
-                    prevScale = scales[j]
-                    stopcb(prevScale)
+            if (delay == 0) {
+                scales[j] += 0.1f * dir
+                if (Math.abs(scales[j] - prevScale) > 1) {
+                    scales[j] = prevScale + dir
+                    delay++
+                }
+            } else {
+                delay++
+                if (delay == MAX_DELAY) {
+                    delay = 0
+                    j += dir.toInt()
+                    if (j == scales.size || j == -1) {
+                        j -= dir.toInt()
+                        dir = 0f
+                        prevScale = scales[j]
+                        stopcb(prevScale)
+                    }
                 }
             }
+
         }
 
         fun startUpdating(startcb : () -> Unit) {
@@ -107,12 +120,12 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
         fun draw(canvas : Canvas, paint : Paint) {
             val w : Float = canvas.width.toFloat()
             val h : Float = canvas.height.toFloat()
-            val wGap : Float = (w / RRMNODES)
+            val wGap : Float = ((0.8f * w) / RRMNODES)
             val size : Float = wGap/5
             paint.strokeCap = Paint.Cap.ROUND
             paint.strokeWidth = wGap / 12
             canvas.save()
-            canvas.translate(i * wGap, h/2)
+            canvas.translate(i * wGap + size/2, h/2)
             canvas.save()
             canvas.translate(wGap * state.scales[2], 0f)
             canvas.drawRect(RectF(-size, -size, size, size), paint)
