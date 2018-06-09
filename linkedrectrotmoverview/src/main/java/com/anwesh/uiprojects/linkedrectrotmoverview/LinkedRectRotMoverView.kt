@@ -7,6 +7,7 @@ package com.anwesh.uiprojects.linkedrectrotmoverview
 import android.app.Activity
 import android.view.MotionEvent
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.view.View
 import android.graphics.*
 
@@ -210,6 +211,7 @@ class LinkedRectRotMoverView (ctx : Context) : View (ctx) {
         fun create(activity : Activity) : LinkedRectRotMoverView {
             val view : LinkedRectRotMoverView = LinkedRectRotMoverView(activity)
             activity.setContentView(view)
+            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
             return view
         }
     }
